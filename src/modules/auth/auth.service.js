@@ -1,10 +1,9 @@
 const AuthModel = require('./auth.model');
 const jwt = require('jsonwebtoken');
-const mailgun = require("mailgun-js");
+const sgMail = require('@sendgrid/mail');
 const bcrypt = require('bcrypt');
-const DOMAIN = process.env.MAILGUN_DOMAIN;
-const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: DOMAIN });
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /**
  * Helps to save user data into DB
@@ -19,18 +18,24 @@ const createUserInDB = async (user) => {
             // creating emailVerificationToken using jsonWebToken
             const emailVerifyToken = jwt.sign(user, process.env.JWT_ACC_ACTIVATE_KEY, { expiresIn: '1d' });
 
-            const data = {
-                from: 'noreply@kd.com',
+            // Sending Verification email using SendGrid
+            const message = {
+                from: 'kartick.dey1995@gmail.com',
                 to: user.email,
-                subject: 'Verify your email to activate account',
+                subject: 'Verify Your Email',
                 html: `
-                <h2>Please click on given link or button to activate your account</h2>
-                <a href='${process.env.CLIENT_URL}/confirmemail?token=${emailVerifyToken}'>Click Here to Verify</a>
+                <h3>Hello ${user.firstName},</h3>
+                <p>Thank you for registering our website</p>
+                <p>Please click on given link or button to activate your account</p>
+                <a href='${process.env.CLIENT_URL}/confirmemail?token=${emailVerifyToken}' style="color: blue">Click Here</a>
+                <br/>
+                <h4>Regards,</h4>
+                <h4>Kartick Dey</h4>
                 `
             };
-            mg.messages().send(data, function (error, body) {
-                console.log(body);
-            });
+            sgMail.send(message)
+            .then(() => console.log("Verification email link send."))
+            .catch(error => console.log("Error in sending email verification link: ", error));
 
             //hashing the pwd before saved to db
             const salt = await bcrypt.genSalt(10);

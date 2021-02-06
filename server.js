@@ -19,7 +19,7 @@ addUsersToDB((error, status) => {
 // Creating an express app
 const app = express();
 
-// Middleware
+// Body Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
