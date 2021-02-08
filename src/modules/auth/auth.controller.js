@@ -103,7 +103,7 @@ const getEmail = (req, res) => {
     // Calling getEmailFromDB() service function to fetch email from DB
     getEmailFromDB(email, (error, emailFromDB) => {
         if (error) {
-            res.status(404).json();
+            res.status(200).json();
         }
         res.status(200).json(emailFromDB);
     });

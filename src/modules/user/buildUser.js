@@ -8,12 +8,6 @@ const buildUser = (usersData) => {
         userObj.phone = user.phone;
         userObj.gender = user.gender;
         userObj.picture = user.picture.thumbnail;
-        userObj.address = user.location.street.number + ', ' + 
-                          user.location.street.name + ', ' + 
-                          user.location.city + ', ' + 
-                          user.location.state + ', ' + 
-                          user.location.country + ', ' + 
-                          user.location.postcode;
 
         users.push(userObj);
     });

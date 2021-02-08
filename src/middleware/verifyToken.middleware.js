@@ -3,7 +3,6 @@ const { getUserByIdFromDB } = require('../modules/auth/auth.service');
 
 const verifyToken = (req, res, next) => {
     const bearerToken = req.header('Authorization');
-    console.log("bearerToken: ", bearerToken);
     if (typeof bearerToken !== 'undefined') {
         // Split at the space to divide Bearer keyword and <token>
         const token = bearerToken.split(' ')[1];
